@@ -76,6 +76,12 @@ header .author{margin:10px 0 0;font-size:.9rem;color:var(--soft)}
 /* ---- focus mode: one verse at a time, swipe or arrows to move */
 .focus-meta{display:none}
 .focus-nav{display:none}
+/* keep the page from panning sideways while a verse slides in or a finger swipes */
+html{overflow-x:hidden}
+@supports (overflow:clip){html{overflow-x:clip}}
+#verses{overflow-x:clip}
+body.focus-mode{touch-action:pan-y pinch-zoom;overscroll-behavior-x:none}
+html:has(body.focus-mode){overscroll-behavior-x:none}
 body.focus-mode header,body.focus-mode .bar,body.focus-mode #credits,
 body.focus-mode #verses .section,body.focus-mode .to-top{display:none}
 body.focus-mode #verses .verse{display:none}
