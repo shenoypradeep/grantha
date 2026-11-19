@@ -1,23 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grantha - Vedic Space</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0f19; color: #f8fafc; margin: 0; padding: 32px 16px; display: flex; justify-content: center; }
-    main { width: 100%; max-width: 640px; }
-    h1 { color: #a5b4fc; margin: 0 0 4px; }
-    p { color: #94a3b8; margin: 0 0 24px; }
-    a.card { display: block; background: #131b2e; border: 1px solid #334155; border-radius: 12px; padding: 16px; color: #f8fafc; text-decoration: none; margin-bottom: 12px; }
-    a.card:hover { border-color: #6366f1; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grantha · Vedic Space - Sacred Texts to Read, Chant & Contemplate</title>
+    <meta name="description" content="Grantha by Vedic Space: a growing library of sacred Sanskrit texts in Devanāgarī with transliteration and meaning, to read, chant and contemplate.">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons@4.29.2/dist/feather.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --deep-blue: #1e40af;
+            --light-blue: #3b82f6;
+            --accent-gold: #f59e0b;
+            --light-gold: #fbbf24;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --text-gray: #64748b;
+            --dark-gray: #334155;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--deep-blue) 100%);
+            min-height: 100vh;
+        }
+
+        .serif { font-family: 'Playfair Display', serif; }
+        .sanskrit { font-family: 'Noto Sans Devanagari', sans-serif; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--light-gold); }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            color: var(--primary-blue);
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            white-space: nowrap;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(251,191,36,0.1)" stroke-width="0.5"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--light-gold);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero .highlight { color: var(--light-gold); }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .sanskrit-verse {
+            background: rgba(30, 64, 175, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 560px;
+        }
+
+        .sanskrit-text {
+            font-size: 26px;
+            color: var(--light-gold);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .translation {
+            font-size: 16px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            color: var(--primary-blue);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--light-gold);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gold);
+            color: var(--primary-blue);
+        }
+
+        /* Library */
+        .library {
+            padding: 100px 0;
+            background: var(--white);
+            color: var(--dark-gray);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grantha-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .grantha-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: left;
+            box-shadow: 0 10px 40px rgba(30, 58, 138, 0.1);
+            transition: all 0.3s;
+            border: 1px solid rgba(30, 58, 138, 0.1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grantha-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+        }
+
+        a.grantha-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(30, 58, 138, 0.15);
+        }
+
+        .grantha-card.coming-soon {
+            opacity: 0.6;
+            box-shadow: none;
+            border-style: dashed;
+        }
+
+        .grantha-card.coming-soon::before {
+            background: rgba(30, 58, 138, 0.15);
+        }
+
+        .grantha-deva {
+            font-size: 28px;
+            color: var(--primary-blue);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .grantha-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+        }
+
+        .grantha-meta {
+            font-size: 14px;
+            color: var(--accent-gold);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .grantha-description {
+            color: var(--text-gray);
+            line-height: 1.7;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .grantha-link {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .grantha-link svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s;
+        }
+
+        a.grantha-card:hover .grantha-link svg { transform: translateX(4px); }
+
+        /* About */
+        .about {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--deep-blue));
+            color: var(--white);
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 25px;
+            padding: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: var(--primary-blue);
+        }
+
+        .about-icon svg { width: 48px; height: 48px; }
+
+        .about-badge {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--light-gold);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .about-title {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .about-subtitle {
+            font-size: 18px;
+            opacity: 0.85;
+            margin-bottom: 40px;
+        }
+
+        .about-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        .detail-group h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--light-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-group p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin-bottom: 16px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--light-gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+            .hero-buttons { flex-wrap: nowrap; }
+        }
+
+        @media (max-width: 767px) {
+            .container { padding: 0 16px; }
+            .logo { font-size: 20px; }
+            .cta-btn { padding: 10px 18px; font-size: 14px; }
+            .hero { padding: 100px 0 60px; }
+            .about-card { padding: 40px 24px; }
+            .grantha-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in { opacity: 1; transform: none; transition: none; }
+        }
+    </style>
 </head>
 <body>
-  <main>
-    <h1>Grantha</h1>
-    <p>Texts from <a href="https://vedicspace.in" style="color:#a5b4fc">Vedic Space</a></p>
-    <a class="card" href="bhajagovindam.html">Bhaja Govindam</a>
-  </main>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="https://vedicspace.in" class="logo serif">
+                    <img src="assets/logo.png" alt="Vedic Space">
+                    Vedic Space
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#library">Library</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="https://vishnu.vedicspace.in">Vishnu Sahasranāma</a></li>
+                    <li><a href="https://blogs.vedicspace.in">Blogs</a></li>
+                </ul>
+                <a href="#library" class="cta-btn">Start Reading</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <div class="hero-badge">
+                    <i data-feather="book-open"></i>
+                    Sacred Texts Library
+                </div>
+
+                <h1 class="serif">
+                    <span class="highlight">Grantha</span><br>
+                    Granthālaya
+                </h1>
+
+                <p>
+                    Timeless Sanskrit texts in Devanāgarī, with transliteration and meaning,
+                    to read, chant and contemplate, one verse at a time.
+                </p>
+
+                <div class="sanskrit-verse">
+                    <div class="sanskrit-text sanskrit">न हि ज्ञानेन सदृशं पवित्रमिह विद्यते</div>
+                    <div class="translation">Na hi jñānena sadṛśaṃ pavitram iha vidyate - "Truly, there is nothing as purifying as knowledge" (Gītā 4.38)</div>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#library" class="btn-primary">
+                        <i data-feather="book"></i>
+                        Explore the Library
+                    </a>
+                    <a href="bhajagovindam.html" class="btn-secondary">
+                        <i data-feather="feather"></i>
+                        Read Bhaja Govindam
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Library -->
+    <section id="library" class="library">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title serif">The Library</h2>
+                <p class="section-subtitle">
+                    Each grantha is presented verse by verse, in the original script with
+                    transliteration and meaning, ready for study and chanting.
+                </p>
+            </div>
+
+            <div class="grantha-grid">
+                <a href="bhajagovindam.html" class="grantha-card fade-in">
+                    <div class="grantha-deva sanskrit">भज गोविन्दम्</div>
+                    <h3 class="grantha-title">Bhaja Govindam</h3>
+                    <div class="grantha-meta">Ādi Śaṅkarācārya · Moha Mudgara</div>
+                    <p class="grantha-description">
+                        The "hammer that shatters delusion": verses urging the seeker to turn
+                        from fleeting pursuits and take refuge in Govinda.
+                    </p>
+                    <span class="grantha-link">Read now <i data-feather="arrow-right"></i></span>
+                </a>
+
+                <div class="grantha-card coming-soon fade-in">
+                    <div class="grantha-deva sanskrit">अमरकोशः</div>
+                    <h3 class="grantha-title">More granthas coming soon</h3>
+                    <div class="grantha-meta">Stotras · Upaniṣads · Kośas</div>
+                    <p class="grantha-description">
+                        The library is growing. New texts will appear here as they are prepared.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-card fade-in">
+                <div class="about-icon">
+                    <i data-feather="book-open"></i>
+                </div>
+
+                <div class="about-badge">ग्रन्थ · GRANTHA</div>
+
+                <h2 class="about-title serif">Read. Chant. Contemplate.</h2>
+                <p class="about-subtitle">
+                    A grantha is a text bound together; a granthālaya, a home for such texts.
+                    This is Vedic Space's home for the scriptures we study and chant together.
+                </p>
+
+                <div class="about-details">
+                    <div class="detail-group">
+                        <h4><i data-feather="type"></i> Original Script</h4>
+                        <p>Every verse in clear Devanāgarī.</p>
+                    </div>
+                    <div class="detail-group">
+                        <h4><i data-feather="mic"></i> Transliteration</h4>
+                        <p>IAST for accurate pronunciation.</p>
+                    </div>
+                    <div class="detail-group">
+                        <h4><i data-feather="message-circle"></i> Meaning</h4>
+                        <p>Plain-English sense of each verse.</p>
+                    </div>
+                </div>
+
+                <a href="#library" class="btn-primary">
+                    Begin Reading
+                    <i data-feather="arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <ul class="footer-links">
+                <li><a href="https://vedicspace.in">Vedic Space</a></li>
+                <li><a href="https://vishnu.vedicspace.in">Vishnu Sahasranāma</a></li>
+                <li><a href="https://blogs.vedicspace.in">Blogs</a></li>
+            </ul>
+            <p>&copy; 2026 Vedic Space · Rooted in Dharma</p>
+        </div>
+    </footer>
+
+    <script>
+        if (window.feather) feather.replace();
+
+        // Header background on scroll
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            header.style.background = window.scrollY > 100
+                ? 'rgba(30, 58, 138, 0.98)'
+                : 'rgba(30, 58, 138, 0.95)';
+        });
+
+        // Fade-in on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
