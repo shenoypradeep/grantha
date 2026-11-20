@@ -1,24 +1,321 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- Vedic Space Grantha · the reader page. The look is in vsgh/base.css and vsgh/grantha.css, the
+     behaviour in vsgh/grantha.js (one copy for the whole site). This file is only the frame that
+     pipeline/reader.py fills with a text's markup. -->
+<html lang="sa">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Bhaja Govindam · Granthālaya · Vedic Space</title>
+<title>Bhaja Govindam · Vedic Space</title>
+<meta name="description" content="Bhaja Govindam (Mohamudgara): the Sanskrit text verse by verse, with transliteration, word-by-word meaning and translation.">
 <link rel="icon" type="image/png" href="assets/logo.png">
+<script>try{var t=localStorage.getItem("vs-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);var f=JSON.parse(localStorage.getItem("vs-grantha-focus")||"{}");if(f.on||/^#(first|last)$/.test(location.hash))document.documentElement.classList.add("pre-focus");}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<link rel="stylesheet" href="library.css">
+<link rel="stylesheet" href="grantha.css">
 </head>
-<body>
-<div class="wrap">
-<header id="home">
-  <h1 class="deva-title" lang="sa">भज गोविन्दम्</h1>
-  <p class="iast-title">Bhaja Govindam</p>
-</header>
-<section class="intro">
-  <p class="lead">This text has been withdrawn while it is prepared afresh from another source.</p>
-  <p><a href="./">Return to the Granthālaya catalogue</a></p>
-</section>
+<body class="show-iast show-lg">
+<div class="topbar" id="topbar">
+  <div class="tb-in">
+    <a class="brand" href="./" title="Grantha · Vedic Space">
+      <img src="assets/logo-128.png" alt="Vedic Space" width="32" height="32">
+      <span class="brand-name">Vedic Space</span>
+    </a>
+    <div class="sec-nav" id="sec-nav" hidden>
+      <button class="sec-cur" id="sec-cur" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="sec-menu" title="Go to another section">
+        <span class="sec-short" id="sec-short" lang="sa" hidden></span><span id="sec-name" lang="sa"></span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg>
+      </button>
+      <div class="sec-menu" id="sec-menu" role="menu" aria-label="Sections"></div>
+    </div>
+    <div class="tb-slot" id="tb-slot" aria-label="Display" inert></div>
+    <span class="tb-title" id="tb-title" lang="sa" aria-hidden="true"></span>
+  </div>
 </div>
+<div class="wrap">
+<header>
+  <p class="trail" id="trail"><a href="./">Library</a><span class="sep" aria-hidden="true">›</span><a href="./#bhaja-govindam">Stotra</a></p>
+  <h1 class="deva-title" id="t-deva">भज गोविन्दम्</h1>
+  <p class="iast-title" id="t-iast">Bhaja Govindam</p>
+  <p class="en-title" id="t-en">Bhaja Govindam (Mohamudgara)</p>
+  <p class="author" id="t-author">Ādi Śaṅkarācārya</p>
+  <p class="about" id="about">31 verses, as printed under the title Mohamudgara in the Srirangam edition of 1910 (<i>The Works of Sri Sankaracharya</i>, vol. 18).</p>
+</header>
+<div class="pioneer-row">
+  <a class="pioneer" href="#credits" data-thanks title="Sources and credits">
+    <span class="pn-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8c-2 1.5-3.4 4.4-3.4 7.4v3.5L5.2 17l3.6 3.4L12 17.2M12 2.8c2 1.5 3.4 4.4 3.4 7.4v3.5l3.4 3.3-3.6 3.4-3.2-3.2M12 2.8v14.4M3.6 18.6l3.6 3.4M20.4 18.6 16.8 22"/></svg></span>
+    <span class="pn-tx"><span class="pn-k">Source</span><span class="pn-t">Srirangam edition, 1910</span></span>
+    <svg class="pn-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+  </a>
+</div>
+<nav class="bar" aria-label="Display">
+  <button class="sw" data-pref="iast" aria-pressed="false"><span class="k"></span>IAST</button>
+  <button class="sw" data-pref="pd" aria-pressed="false"><span class="k"></span><span class="lf">Padaccheda</span><span class="ls">Pada</span></button>
+  <button class="sw" data-pref="wbw" aria-pressed="false"><span class="k"></span><span class="lf">Word by word</span><span class="ls">Words</span></button>
+  <button class="theme-btn focus-btn" type="button" data-focus-toggle aria-pressed="false" aria-label="Focus: one verse at a time" title="Focus: one verse at a time">
+    <svg class="i-max" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+    <svg class="i-min" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+  </button>
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode">
+    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+  </button>
+  <a class="theme-btn thanks-btn" href="#credits" data-thanks aria-label="Sources and credits" title="Sources and credits">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path class="nm" d="M12 2.8c-2 1.5-3.4 4.4-3.4 7.4v3.5L5.2 17l3.6 3.4L12 17.2M12 2.8c2 1.5 3.4 4.4 3.4 7.4v3.5l3.4 3.3-3.6 3.4-3.2-3.2M12 2.8v14.4M3.6 18.6l3.6 3.4M20.4 18.6 16.8 22"/></svg>
+  </a>
+</nav>
+<div class="focus-meta" id="focus-meta" aria-live="polite"><div class="fm-sec" id="fm-sec"></div><div class="fm-n" id="fm-n"></div></div>
+<main id="verses">
+<article class="verse" id="v1" data-src="0" data-ref="0"><div class="vhead"></div><div class="sa">भज गोविन्दं भज गोविन्दं
+भज गोविन्दं मूढमते ।
+सम्प्राप्ते सन्निहिते काले
+न हि न हि रक्षति डुकृङ्करणे ॥ १ ॥</div><div class="iast">bhaja govindaṃ bhaja govindaṃ
+bhaja govindaṃ mūḍhamate |
+samprāpte sannihite kāle
+na hi na hi rakṣati ḍukṛṅkaraṇe || 1 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">भज गोविन्दम् भज गोविन्दम् भज गोविन्दम् मूढ-मते सम्प्राप्ते सन्निहिते काले न हि न हि रक्षति डुकृङ्-करणे</div><div class="pd-i">bhaja govindam bhaja govindam bhaja govindam mūḍha-mate samprāpte sannihite kāle na hi na hi rakṣati ḍukṛṅ-karaṇe</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Worship Govinda, worship Govinda, worship Govinda, O deluded one! When the hour of death has come and stands before you, the grammar rule “ḍukṛñ karaṇe” will never, never save you.</div><div class="notes"><p><b>Note</b> ḍukṛṅkaraṇe is the Dhātupāṭha entry ḍukṛñ karaṇe (the root kṛ, ‘to do’), with ñ becoming ṅ before k.</p></div></article>
+<article class="verse" id="v2" data-src="0" data-ref="1"><div class="vhead"></div><div class="sa">मूढ जहीहि धनागमतृष्णां
+कुरु सद्बुद्धिं मनसि वितृष्णाम् ।
+यल्लभसे निजकर्मोपात्तं
+वित्तं तेन विनोदय चित्तम् ॥ २ ॥</div><div class="iast">mūḍha jahīhi dhanāgamatṛṣṇāṃ
+kuru sadbuddhiṃ manasi vitṛṣṇām |
+yallabhase nijakarmopāttaṃ
+vittaṃ tena vinodaya cittam || 2 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">मूढ जहीहि धन-आगम-तृष्णाम् कुरु सत्-बुद्धिम् मनसि वितृष्णाम् यत् लभसे निज-कर्म-उपात्तम् वित्तम् तेन विनोदय चित्तम्</div><div class="pd-i">mūḍha jahīhi dhana-āgama-tṛṣṇām kuru sat-buddhim manasi vitṛṣṇām yat labhase nija-karma-upāttam vittam tena vinodaya cittam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">O deluded one, give up the thirst to gain wealth. Cultivate in your mind a right understanding, free from craving. Whatever wealth you earn by your own work, let your mind be content with that.</div></article>
+<article class="verse" id="v3" data-src="0" data-ref="2"><div class="vhead"></div><div class="sa">नारीस्तनभरनाभीदेशं
+दृष्ट्वा मा गा मोहावेशम् ।
+एतन्मांसवसादिविकारं
+मनसि विचिन्तय वारं वारम् ॥ ३ ॥</div><div class="iast">nārīstanabharanābhīdeśaṃ
+dṛṣṭvā mā gā mohāveśam |
+etanmāṃsavasādivikāraṃ
+manasi vicintaya vāraṃ vāram || 3 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">नारी-स्तन-भर-नाभी-देशम् दृष्ट्वा मा गाः मोह-आवेशम् एतत् मांस-वसा-आदि-विकारम् मनसि विचिन्तय वारम् वारम्</div><div class="pd-i">nārī-stana-bhara-nābhī-deśam dṛṣṭvā mā gāḥ moha-āveśam etat māṃsa-vasā-ādi-vikāram manasi vicintaya vāram vāram</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Do not fall into the grip of delusion at the sight of a woman&#x27;s full breasts and navel. Reflect in your mind, again and again, that this is only a form of flesh, fat and the like.</div></article>
+<article class="verse" id="v4" data-src="0" data-ref="3"><div class="vhead"></div><div class="sa">नलिनीदलगतजलमतितरलं
+तद्वज्जीवितमतिशयचपलम् ।
+विद्धि व्याध्यभिमानग्रस्तं
+लोकं शोकहतं च समस्तम् ॥ ४ ॥</div><div class="iast">nalinīdalagatajalamatitaralaṃ
+tadvajjīvitamatiśayacapalam |
+viddhi vyādhyabhimānagrastaṃ
+lokaṃ śokahataṃ ca samastam || 4 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">नलिनी-दल-गत-जलम् अति-तरलम् तद्वत् जीवितम् अतिशय-चपलम् विद्धि व्याधि-अभिमान-ग्रस्तम् लोकम् शोक-हतम् च समस्तम्</div><div class="pd-i">nalinī-dala-gata-jalam ati-taralam tadvat jīvitam atiśaya-capalam viddhi vyādhi-abhimāna-grastam lokam śoka-hatam ca samastam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Water on a lotus leaf trembles ceaselessly; so too is life, exceedingly fleeting. Know that the whole world is seized by disease and pride, and stricken with grief.</div></article>
+<article class="verse" id="v5" data-src="0" data-ref="4"><div class="vhead"></div><div class="sa">यावद्वित्तोपार्जनसक्त-
+स्तावन्निजपरिवारो रक्तः ।
+पश्चाज्जीवति जर्जरदेहे
+वार्तां कोऽपि न पृच्छति गेहे ॥ ५ ॥</div><div class="iast">yāvadvittopārjanasakta-
+stāvannijaparivāro raktaḥ |
+paścājjīvati jarjaradehe
+vārtāṃ ko&#x27;pi na pṛcchati gehe || 5 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">यावत् वित्त-उपार्जन-सक्तः तावत् निज-परिवारः रक्तः पश्चात् जीवति जर्जर-देहे वार्ताम् कः अपि न पृच्छति गेहे</div><div class="pd-i">yāvat vitta-upārjana-saktaḥ tāvat nija-parivāraḥ raktaḥ paścāt jīvati jarjara-dehe vārtām kaḥ api na pṛcchati gehe</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">As long as a man can earn, his family is devoted to him. Afterwards, when he lives on in a worn-out body, no one at home asks even a word of him.</div></article>
+<article class="verse" id="v6" data-src="0" data-ref="5"><div class="vhead"></div><div class="sa">यावत्पवनो निवसति देहे
+तावत्पृच्छति कुशलं गेहे ।
+गतवति वायौ देहापाये
+भार्या बिभ्यति तस्मिन्काये ॥ ६ ॥</div><div class="iast">yāvatpavano nivasati dehe
+tāvatpṛcchati kuśalaṃ gehe |
+gatavati vāyau dehāpāye
+bhāryā bibhyati tasminkāye || 6 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">यावत् पवनः निवसति देहे तावत् पृच्छति कुशलम् गेहे गतवति वायौ देह-अपाये भार्या बिभ्यति तस्मिन् काये</div><div class="pd-i">yāvat pavanaḥ nivasati dehe tāvat pṛcchati kuśalam gehe gatavati vāyau deha-apāye bhāryā bibhyati tasmin kāye</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">As long as breath dwells in the body, people at home ask after your welfare. When the breath has gone and the body has fallen, even your wife fears that same body.</div><div class="notes"><p><b>Note</b> bibhyati is a plural form used with the singular bhāryā, a licence of the verse.</p></div></article>
+<article class="verse" id="v7" data-src="0" data-ref="6"><div class="vhead"></div><div class="sa">बालस्तावत्क्रीडासक्त-
+स्तरुणस्तावत्तरुणीसक्तः ।
+वृद्धस्तावच्चिन्तासक्तः
+परे ब्रह्मणि कोऽपि न सक्तः ॥ ७ ॥</div><div class="iast">bālastāvatkrīḍāsakta-
+staruṇastāvattaruṇīsaktaḥ |
+vṛddhastāvaccintāsaktaḥ
+pare brahmaṇi ko&#x27;pi na saktaḥ || 7 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">बालः तावत् क्रीडा-सक्तः तरुणः तावत् तरुणी-सक्तः वृद्धः तावत् चिन्ता-सक्तः परे ब्रह्मणि कः अपि न सक्तः</div><div class="pd-i">bālaḥ tāvat krīḍā-saktaḥ taruṇaḥ tāvat taruṇī-saktaḥ vṛddhaḥ tāvat cintā-saktaḥ pare brahmaṇi kaḥ api na saktaḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">The child is absorbed in play, the youth in a young woman, the old man in his worries. Yet no one at all is absorbed in the supreme Brahman.</div></article>
+<article class="verse" id="v8" data-src="0" data-ref="7"><div class="vhead"></div><div class="sa">का ते कान्ता कस्ते पुत्रः
+संसारोऽयमतीव विचित्रः ।
+कस्य त्वं कः कुत आयात-
+स्तत्त्वं चिन्तय यदिदं भ्रान्तः ॥ ८ ॥</div><div class="iast">kā te kāntā kaste putraḥ
+saṃsāro&#x27;yamatīva vicitraḥ |
+kasya tvaṃ kaḥ kuta āyāta-
+stattvaṃ cintaya yadidaṃ bhrāntaḥ || 8 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">का ते कान्ता कः ते पुत्रः संसारः अयम् अतीव विचित्रः कस्य त्वम् कः कुतः आयातः तत्त्वम् चिन्तय यत् इदम् भ्रान्तः</div><div class="pd-i">kā te kāntā kaḥ te putraḥ saṃsāraḥ ayam atīva vicitraḥ kasya tvam kaḥ kutaḥ āyātaḥ tattvam cintaya yat idam bhrāntaḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Who is your wife? Who is your son? Strange indeed is this worldly life. Whose are you? Who are you? Where have you come from? Reflect on the truth of all this, about which you are deluded.</div></article>
+<article class="verse" id="v9" data-src="0" data-ref="8"><div class="vhead"></div><div class="sa">सत्सङ्गत्वे निःसङ्गत्वं
+निःसङ्गत्वे निर्मोहत्वम् ।
+निर्मोहत्वे निश्चलितत्वं
+निश्चलितत्वे जीवन्मुक्तिः ॥ ९ ॥</div><div class="iast">satsaṅgatve niḥsaṅgatvaṃ
+niḥsaṅgatve nirmohatvam |
+nirmohatve niścalitatvaṃ
+niścalitatve jīvanmuktiḥ || 9 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">सत्-सङ्गत्वे निःसङ्गत्वम् निःसङ्गत्वे निर्मोहत्वम् निर्मोहत्वे निश्चलितत्वम् निश्चलितत्वे जीवत्-मुक्तिः</div><div class="pd-i">sat-saṅgatve niḥsaṅgatvam niḥsaṅgatve nirmohatvam nirmohatve niścalitatvam niścalitatve jīvat-muktiḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Good company leads to non-attachment; non-attachment to freedom from delusion; freedom from delusion to steadiness of mind; and steadiness to liberation while living.</div></article>
+<article class="verse" id="v10" data-src="0" data-ref="9"><div class="vhead"></div><div class="sa">वयसि गते कः कामविकारः
+शुष्के नीरे कः कासारः ।
+क्षीणे वित्ते कः परिवारो
+ज्ञाते तत्त्वे कः संसारः ॥ १० ॥</div><div class="iast">vayasi gate kaḥ kāmavikāraḥ
+śuṣke nīre kaḥ kāsāraḥ |
+kṣīṇe vitte kaḥ parivāro
+jñāte tattve kaḥ saṃsāraḥ || 10 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">वयसि गते कः काम-विकारः शुष्के नीरे कः कासारः क्षीणे वित्ते कः परिवारः ज्ञाते तत्त्वे कः संसारः</div><div class="pd-i">vayasi gate kaḥ kāma-vikāraḥ śuṣke nīre kaḥ kāsāraḥ kṣīṇe vitte kaḥ parivāraḥ jñāte tattve kaḥ saṃsāraḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">When youth is gone, where is desire? When the water has dried up, where is the lake? When wealth is spent, where is the family? When the truth is known, where is worldly bondage?</div></article>
+<article class="verse" id="v11" data-src="0" data-ref="10"><div class="vhead"></div><div class="sa">मा कुरु धनजनयौवनगर्वं
+हरति निमेषात्कालः सर्वम् ।
+मायामयमिदमखिलं हित्वा
+ब्रह्मपदं त्वं प्रविश विदित्वा ॥ ११ ॥</div><div class="iast">mā kuru dhanajanayauvanagarvaṃ
+harati nimeṣātkālaḥ sarvam |
+māyāmayamidamakhilaṃ hitvā
+brahmapadaṃ tvaṃ praviśa viditvā || 11 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">मा कुरु धन-जन-यौवन-गर्वम् हरति निमेषात् कालः सर्वम् माया-मयम् इदम् अखिलम् हित्वा ब्रह्म-पदम् त्वम् प्रविश विदित्वा</div><div class="pd-i">mā kuru dhana-jana-yauvana-garvam harati nimeṣāt kālaḥ sarvam māyā-mayam idam akhilam hitvā brahma-padam tvam praviśa viditvā</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Take no pride in wealth, followers or youth; time carries all of it away in the blink of an eye. Leave behind this whole world, which is made of illusion, know Brahman, and enter that state.</div></article>
+<article class="verse" id="v12" data-src="0" data-ref="11"><div class="vhead"></div><div class="sa">दिनयामिन्यौ सायं प्रातः
+शिशिरवसन्तौ पुनरायातः ।
+कालः क्रीडति गच्छत्यायु-
+स्तदपि न मुञ्चत्याशावायुः ॥ १२ ॥</div><div class="iast">dinayāminyau sāyaṃ prātaḥ
+śiśiravasantau punarāyātaḥ |
+kālaḥ krīḍati gacchatyāyu-
+stadapi na muñcatyāśāvāyuḥ || 12 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">दिन-यामिन्यौ सायम् प्रातः शिशिर-वसन्तौ पुनः आयातः कालः क्रीडति गच्छति आयुः तत् अपि न मुञ्चति आशा-वायुः</div><div class="pd-i">dina-yāminyau sāyam prātaḥ śiśira-vasantau punaḥ āyātaḥ kālaḥ krīḍati gacchati āyuḥ tat api na muñcati āśā-vāyuḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Day and night, evening and morning, winter and spring come round again and again. Time plays, life ebbs away, yet the wind of desire never lets go.</div></article>
+<article class="verse" id="v13" data-src="0" data-ref="12"><div class="vhead"></div><div class="sa">का ते कान्ताधनगतचिन्ता
+वातुल किं तव नास्ति नियन्ता ।
+त्रिजगति सज्जनसङ्गतिरेका
+भवति भवार्णवतरणे नौका ॥ १३ ॥</div><div class="iast">kā te kāntādhanagatacintā
+vātula kiṃ tava nāsti niyantā |
+trijagati sajjanasaṅgatirekā
+bhavati bhavārṇavataraṇe naukā || 13 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">का ते कान्ता-धन-गत-चिन्ता वातुल किम् तव न अस्ति नियन्ता त्रि-जगति सत्-जन-सङ्गतिः एका भवति भव-अर्णव-तरणे नौका</div><div class="pd-i">kā te kāntā-dhana-gata-cintā vātula kim tava na asti niyantā tri-jagati sat-jana-saṅgatiḥ ekā bhavati bhava-arṇava-taraṇe naukā</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Why this worry about wife and wealth, O distracted one? Have you no one to guide you? In all three worlds, the company of the good alone is the boat for crossing the ocean of birth and death.</div></article>
+<article class="verse" id="v14" data-src="0" data-ref="13"><div class="vhead"></div><div class="sa">जटिली मुण्डी लुञ्चितकेशः
+काषायाम्बरबहुकृतवेषः ।
+पश्यन्नपि च न पश्यति मूढो
+ह्युदरनिमित्तं बहुकृतवेषः ॥ १४ ॥</div><div class="iast">jaṭilī muṇḍī luñcitakeśaḥ
+kāṣāyāmbarabahukṛtaveṣaḥ |
+paśyannapi ca na paśyati mūḍho
+hyudaranimittaṃ bahukṛtaveṣaḥ || 14 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">जटिली मुण्डी लुञ्चित-केशः काषाय-अम्बर-बहु-कृत-वेषः पश्यन् अपि च न पश्यति मूढः हि उदर-निमित्तम् बहु-कृत-वेषः</div><div class="pd-i">jaṭilī muṇḍī luñcita-keśaḥ kāṣāya-ambara-bahu-kṛta-veṣaḥ paśyan api ca na paśyati mūḍhaḥ hi udara-nimittam bahu-kṛta-veṣaḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">One with matted locks, one with shaven head, one with hair plucked out, one in ochre robes and many other guises: the fool sees and still does not see. All these guises are worn for the sake of the belly.</div></article>
+<article class="verse" id="v15" data-src="0" data-ref="14"><div class="vhead"></div><div class="sa">अङ्गं गलितं पलितं मुण्डं
+दशनविहीनं जातं तुण्डम् ।
+वृद्धो याति गृहीत्वा दण्डं
+तदपि न मुञ्चत्याशापिण्डम् ॥ १५ ॥</div><div class="iast">aṅgaṃ galitaṃ palitaṃ muṇḍaṃ
+daśanavihīnaṃ jātaṃ tuṇḍam |
+vṛddho yāti gṛhītvā daṇḍaṃ
+tadapi na muñcatyāśāpiṇḍam || 15 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">अङ्गम् गलितम् पलितम् मुण्डम् दशन-विहीनम् जातम् तुण्डम् वृद्धः याति गृहीत्वा दण्डम् तत् अपि न मुञ्चति आशा-पिण्डम्</div><div class="pd-i">aṅgam galitam palitam muṇḍam daśana-vihīnam jātam tuṇḍam vṛddhaḥ yāti gṛhītvā daṇḍam tat api na muñcati āśā-piṇḍam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">The body has wasted, the head turned grey, the mouth become toothless. The old man walks leaning on a stick, and even then he does not let go of his bundle of desires.</div></article>
+<article class="verse" id="v16" data-src="0" data-ref="15"><div class="vhead"></div><div class="sa">अग्रे वह्निः पृष्ठे भानू
+रात्रौ चुबुकसमर्पितजानुः ।
+करतलभिक्षस्तरुतलवास-
+स्तदपि न मुञ्चत्याशापाशः ॥ १६ ॥</div><div class="iast">agre vahniḥ pṛṣṭhe bhānū
+rātrau cubukasamarpitajānuḥ |
+karatalabhikṣastarutalavāsa-
+stadapi na muñcatyāśāpāśaḥ || 16 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">अग्रे वह्निः पृष्ठे भानुः रात्रौ चुबुक-समर्पित-जानुः कर-तल-भिक्षः तरु-तल-वासः तत् अपि न मुञ्चति आशा-पाशः</div><div class="pd-i">agre vahniḥ pṛṣṭhe bhānuḥ rātrau cubuka-samarpita-jānuḥ kara-tala-bhikṣaḥ taru-tala-vāsaḥ tat api na muñcati āśā-pāśaḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Fire in front, the sun behind; at night he sits with knees drawn up to his chin; he takes alms in his palm and lives at the foot of a tree. Even so, the noose of desire does not release him.</div></article>
+<article class="verse" id="v17" data-src="0" data-ref="16"><div class="vhead"></div><div class="sa">कुरुते गङ्गासागरगमनं
+व्रतपरिपालनमथवा दानम् ।
+ज्ञानविहीनः सर्वमतेन
+मुक्तिं न भजति जन्मशतेन ॥ १७ ॥</div><div class="iast">kurute gaṅgāsāgaragamanaṃ
+vrataparipālanamathavā dānam |
+jñānavihīnaḥ sarvamatena
+muktiṃ na bhajati janmaśatena || 17 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">कुरुते गङ्गा-सागर-गमनम् व्रत-परिपालनम् अथवा दानम् ज्ञान-विहीनः सर्व-मतेन मुक्तिम् न भजति जन्म-शतेन</div><div class="pd-i">kurute gaṅgā-sāgara-gamanam vrata-paripālanam athavā dānam jñāna-vihīnaḥ sarva-matena muktim na bhajati janma-śatena</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">One may go on pilgrimage to Gaṅgāsāgara, keep vows or give in charity. Yet without knowledge, by the verdict of every school, one does not attain liberation even in a hundred births.</div></article>
+<article class="verse" id="v18" data-src="0" data-ref="17"><div class="vhead"></div><div class="sa">सुरमन्दिरतरुमूलनिवासः
+शय्या भूतलमजिनं वासः ।
+सर्वपरिग्रहभोगत्यागः
+कस्य सुखं न करोति विरागः ॥ १८ ॥</div><div class="iast">suramandiratarumūlanivāsaḥ
+śayyā bhūtalamajinaṃ vāsaḥ |
+sarvaparigrahabhogatyāgaḥ
+kasya sukhaṃ na karoti virāgaḥ || 18 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">सुर-मन्दिर-तरु-मूल-निवासः शय्या भू-तलम् अजिनम् वासः सर्व-परिग्रह-भोग-त्यागः कस्य सुखम् न करोति विरागः</div><div class="pd-i">sura-mandira-taru-mūla-nivāsaḥ śayyā bhū-talam ajinam vāsaḥ sarva-parigraha-bhoga-tyāgaḥ kasya sukham na karoti virāgaḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Living in a temple or at the foot of a tree, the bare ground for a bed, a deerskin for clothing, renouncing all possessions and pleasures: to whom does such dispassion not bring happiness?</div></article>
+<article class="verse" id="v19" data-src="0" data-ref="18"><div class="vhead"></div><div class="sa">योगरतो वा भोगरतो वा
+सङ्गरतो वा सङ्गविहीनः ।
+यस्य ब्रह्मणि रमते चित्तं
+नन्दति नन्दति नन्दत्येव ॥ १९ ॥</div><div class="iast">yogarato vā bhogarato vā
+saṅgarato vā saṅgavihīnaḥ |
+yasya brahmaṇi ramate cittaṃ
+nandati nandati nandatyeva || 19 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">योग-रतः वा भोग-रतः वा सङ्ग-रतः वा सङ्ग-विहीनः यस्य ब्रह्मणि रमते चित्तम् नन्दति नन्दति नन्दति एव</div><div class="pd-i">yoga-rataḥ vā bhoga-rataḥ vā saṅga-rataḥ vā saṅga-vihīnaḥ yasya brahmaṇi ramate cittam nandati nandati nandati eva</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Whether devoted to yoga or to enjoyment, whether in company or alone, the one whose mind delights in Brahman rejoices, rejoices, rejoices indeed.</div></article>
+<article class="verse" id="v20" data-src="0" data-ref="19"><div class="vhead"></div><div class="sa">भगवद्गीता किंचिदधीता
+गङ्गाजललवकणिका पीता ।
+सकृदपि येन मुरारिसमर्चा
+क्रियते तस्य यमेन न चर्चा ॥ २० ॥</div><div class="iast">bhagavadgītā kiṃcidadhītā
+gaṅgājalalavakaṇikā pītā |
+sakṛdapi yena murārisamarcā
+kriyate tasya yamena na carcā || 20 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">भगवत्-गीता किञ्चित् अधीता गङ्गा-जल-लव-कणिका पीता सकृत् अपि येन मुरारि-समर्चा क्रियते तस्य यमेन न चर्चा</div><div class="pd-i">bhagavat-gītā kiñcit adhītā gaṅgā-jala-lava-kaṇikā pītā sakṛt api yena murāri-samarcā kriyate tasya yamena na carcā</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">One who has studied the Bhagavad Gītā even a little, drunk a single drop of Gaṅgā water, and worshipped Murāri even once, has no dispute with Yama.</div></article>
+<article class="verse" id="v21" data-src="0" data-ref="20"><div class="vhead"></div><div class="sa">पुनरपि जननं पुनरपि मरणं
+पुनरपि जननीजठरे शयनम् ।
+इह संसारे बहुदुस्तारे
+कृपयापारे पाहि मुरारे ॥ २१ ॥</div><div class="iast">punarapi jananaṃ punarapi maraṇaṃ
+punarapi jananījaṭhare śayanam |
+iha saṃsāre bahudustāre
+kṛpayāpāre pāhi murāre || 21 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">पुनः अपि जननम् पुनः अपि मरणम् पुनः अपि जननी-जठरे शयनम् इह संसारे बहु-दुस्तारे कृपया अपारे पाहि मुरारे</div><div class="pd-i">punaḥ api jananam punaḥ api maraṇam punaḥ api jananī-jaṭhare śayanam iha saṃsāre bahu-dustāre kṛpayā apāre pāhi murāre</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Birth again, death again, and again lying in a mother&#x27;s womb. In this cycle of birth and death, boundless and so hard to cross, protect me by your compassion, O Murāri.</div></article>
+<article class="verse" id="v22" data-src="0" data-ref="21"><div class="vhead"></div><div class="sa">रथ्याकर्पटविरचितकन्थः
+पुण्यापुण्यविवर्जितपन्थः ।
+योगी योगनियोजितचित्तो
+रमते बालोन्मत्तवदेव ॥ २२ ॥</div><div class="iast">rathyākarpaṭaviracitakanthaḥ
+puṇyāpuṇyavivarjitapanthaḥ |
+yogī yoganiyojitacitto
+ramate bālonmattavadeva || 22 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">रथ्या-कर्पट-विरचित-कन्थः पुण्य-अपुण्य-विवर्जित-पन्थः योगी योग-नियोजित-चित्तः रमते बाल-उन्मत्त-वत् एव</div><div class="pd-i">rathyā-karpaṭa-viracita-kanthaḥ puṇya-apuṇya-vivarjita-panthaḥ yogī yoga-niyojita-cittaḥ ramate bāla-unmatta-vat eva</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Wearing a quilt stitched from rags found on the road, walking a path beyond merit and demerit, the yogī whose mind is set in yoga delights like a child, like one intoxicated.</div></article>
+<article class="verse" id="v23" data-src="0" data-ref="22"><div class="vhead"></div><div class="sa">कस्त्वं कोऽहं कुत आयातः
+का मे जननी को मे तातः ।
+इति परिभावय सर्वमसारं
+विश्वं त्यक्त्वा स्वप्नविचारम् ॥ २३ ॥</div><div class="iast">kastvaṃ ko&#x27;haṃ kuta āyātaḥ
+kā me jananī ko me tātaḥ |
+iti paribhāvaya sarvamasāraṃ
+viśvaṃ tyaktvā svapnavicāram || 23 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">कः त्वम् कः अहम् कुतः आयातः का मे जननी कः मे तातः इति परिभावय सर्वम् असारम् विश्वम् त्यक्त्वा स्वप्न-विचारम्</div><div class="pd-i">kaḥ tvam kaḥ aham kutaḥ āyātaḥ kā me jananī kaḥ me tātaḥ iti paribhāvaya sarvam asāram viśvam tyaktvā svapna-vicāram</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Who are you? Who am I? Where have I come from? Who is my mother, who my father? Reflect on this, see everything as without essence, and leave the world behind as a figment of a dream.</div></article>
+<article class="verse" id="v24" data-src="0" data-ref="23"><div class="vhead"></div><div class="sa">त्वयि मयि चान्यत्रैको विष्णु-
+र्व्यर्थं कुप्यसि मय्यसहिष्णुः ।
+सर्वस्मिन्नपि पश्यात्मानं
+सर्वत्रोत्सृज भेदाज्ञानम् ॥ २४ ॥</div><div class="iast">tvayi mayi cānyatraiko viṣṇu-
+rvyarthaṃ kupyasi mayyasahiṣṇuḥ |
+sarvasminnapi paśyātmānaṃ
+sarvatrotsṛja bhedājñānam || 24 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">त्वयि मयि च अन्यत्र एकः विष्णुः व्यर्थम् कुप्यसि मयि असहिष्णुः सर्वस्मिन् अपि पश्य आत्मानम् सर्वत्र उत्सृज भेद-अज्ञानम्</div><div class="pd-i">tvayi mayi ca anyatra ekaḥ viṣṇuḥ vyartham kupyasi mayi asahiṣṇuḥ sarvasmin api paśya ātmānam sarvatra utsṛja bheda-ajñānam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">In you, in me and everywhere else dwells the one Viṣṇu; in vain are you angry and impatient with me. See the Self in all, and everywhere give up the ignorance that sees difference.</div></article>
+<article class="verse" id="v25" data-src="0" data-ref="24"><div class="vhead"></div><div class="sa">शत्रौ मित्रे पुत्रे बन्धौ
+मा कुरु यत्नं विग्रहसन्धौ ।
+भव समचित्तः सर्वत्र त्वं
+वाञ्छस्यचिराद्यदि विष्णुत्वम् ॥ २५ ॥</div><div class="iast">śatrau mitre putre bandhau
+mā kuru yatnaṃ vigrahasandhau |
+bhava samacittaḥ sarvatra tvaṃ
+vāñchasyacirādyadi viṣṇutvam || 25 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">शत्रौ मित्रे पुत्रे बन्धौ मा कुरु यत्नम् विग्रह-सन्धौ भव सम-चित्तः सर्वत्र त्वम् वाञ्छसि अचिरात् यदि विष्णुत्वम्</div><div class="pd-i">śatrau mitre putre bandhau mā kuru yatnam vigraha-sandhau bhava sama-cittaḥ sarvatra tvam vāñchasi acirāt yadi viṣṇutvam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Towards foe or friend, son or kinsman, make no effort to quarrel or to make alliances. If you wish soon to attain the state of Viṣṇu, be even-minded towards all.</div></article>
+<article class="verse" id="v26" data-src="0" data-ref="25"><div class="vhead"></div><div class="sa">कामं क्रोधं लोभं मोहं
+त्यक्त्वात्मानं भावय कोऽहम् ।
+आत्मज्ञानविहीना मूढा-
+स्ते पच्यन्ते नरकनिगूढाः ॥ २६ ॥</div><div class="iast">kāmaṃ krodhaṃ lobhaṃ mohaṃ
+tyaktvātmānaṃ bhāvaya ko&#x27;ham |
+ātmajñānavihīnā mūḍhā-
+ste pacyante narakanigūḍhāḥ || 26 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">कामम् क्रोधम् लोभम् मोहम् त्यक्त्वा आत्मानम् भावय कः अहम् आत्म-ज्ञान-विहीनाः मूढाः ते पच्यन्ते नरक-निगूढाः</div><div class="pd-i">kāmam krodham lobham moham tyaktvā ātmānam bhāvaya kaḥ aham ātma-jñāna-vihīnāḥ mūḍhāḥ te pacyante naraka-nigūḍhāḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Giving up desire, anger, greed and delusion, contemplate yourself: “Who am I?” Fools devoid of Self-knowledge are tormented, hidden away in hell.</div></article>
+<article class="verse" id="v27" data-src="0" data-ref="26"><div class="vhead"></div><div class="sa">गेयं गीतानामसहस्रं
+ध्येयं श्रीपतिरूपमजस्रम् ।
+नेयं सज्जनसङ्गे चित्तं
+देयं दीनजनाय च वित्तम् ॥ २७ ॥</div><div class="iast">geyaṃ gītānāmasahasraṃ
+dhyeyaṃ śrīpatirūpamajasram |
+neyaṃ sajjanasaṅge cittaṃ
+deyaṃ dīnajanāya ca vittam || 27 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">गेयम् गीता नाम-सहस्रम् ध्येयम् श्रीपति-रूपम् अजस्रम् नेयम् सत्-जन-सङ्गे चित्तम् देयम् दीन-जनाय च वित्तम्</div><div class="pd-i">geyam gītā nāma-sahasram dhyeyam śrīpati-rūpam ajasram neyam sat-jana-saṅge cittam deyam dīna-janāya ca vittam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">The Gītā and the Thousand Names are to be sung; the form of the Lord of Śrī is to be meditated on constantly; the mind is to be led into the company of the good; and wealth is to be given to the needy.</div></article>
+<article class="verse" id="v28" data-src="0" data-ref="27"><div class="vhead"></div><div class="sa">सुखतः क्रियते रामाभोगः
+पश्चाद्धन्त शरीरे रोगः ।
+यद्यपि लोके मरणं शरणं
+तदपि न मुञ्चति पापाचरणम् ॥ २८ ॥</div><div class="iast">sukhataḥ kriyate rāmābhogaḥ
+paścāddhanta śarīre rogaḥ |
+yadyapi loke maraṇaṃ śaraṇaṃ
+tadapi na muñcati pāpācaraṇam || 28 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">सुखतः क्रियते रामा-भोगः पश्चात् हन्त शरीरे रोगः यदि अपि लोके मरणम् शरणम् तत् अपि न मुञ्चति पाप-आचरणम्</div><div class="pd-i">sukhataḥ kriyate rāmā-bhogaḥ paścāt hanta śarīre rogaḥ yadi api loke maraṇam śaraṇam tat api na muñcati pāpa-ācaraṇam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Sensual pleasure is indulged in for its delight; afterwards, alas, comes disease of the body. Though in this world death is the final end, still one does not give up sinful ways.</div></article>
+<article class="verse" id="v29" data-src="0" data-ref="28"><div class="vhead"></div><div class="sa">अर्थमनर्थं भावय नित्यं
+नास्ति ततः सुखलेशः सत्यम् ।
+पुत्रादपि धनभाजां भीतिः
+सर्वत्रैषा विहिता रीतिः ॥ २९ ॥</div><div class="iast">arthamanarthaṃ bhāvaya nityaṃ
+nāsti tataḥ sukhaleśaḥ satyam |
+putrādapi dhanabhājāṃ bhītiḥ
+sarvatraiṣā vihitā rītiḥ || 29 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">अर्थम् अनर्थम् भावय नित्यम् न अस्ति ततः सुख-लेशः सत्यम् पुत्रात् अपि धन-भाजाम् भीतिः सर्वत्र एषा विहिता रीतिः</div><div class="pd-i">artham anartham bhāvaya nityam na asti tataḥ sukha-leśaḥ satyam putrāt api dhana-bhājām bhītiḥ sarvatra eṣā vihitā rītiḥ</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Always regard wealth as a source of harm; truly, there is not a trace of happiness in it. The wealthy fear even their own sons. Everywhere this is the way of things.</div></article>
+<article class="verse" id="v30" data-src="0" data-ref="29"><div class="vhead"></div><div class="sa">प्राणायामं प्रत्याहारं
+नित्यानित्यविवेकविचारम् ।
+जाप्यसमेतसमाधिविधानं
+कुर्ववधानं महदवधानम् ॥ ३० ॥</div><div class="iast">prāṇāyāmaṃ pratyāhāraṃ
+nityānityavivekavicāram |
+jāpyasametasamādhividhānaṃ
+kurvavadhānaṃ mahadavadhānam || 30 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">प्राणायामम् प्रत्याहारम् नित्य-अनित्य-विवेक-विचारम् जाप्य-समेत-समाधि-विधानम् कुरु अवधानम् महत् अवधानम्</div><div class="pd-i">prāṇāyāmam pratyāhāram nitya-anitya-viveka-vicāram jāpya-sameta-samādhi-vidhānam kuru avadhānam mahat avadhānam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Regulation of the breath, withdrawal of the senses, inquiry that discerns the eternal from the transient, and the practice of meditative absorption together with repetition of the mantra: do these with attention, with great attention.</div></article>
+<article class="verse" id="v31" data-src="0" data-ref="30"><div class="vhead"></div><div class="sa">गुरुचरणाम्बुजनिर्भरभक्तः
+संसारादचिराद्भव मुक्तः ।
+सेन्द्रियमानसनियमादेवं
+द्रक्ष्यसि निजहृदयस्थं देवम् ॥ ३१ ॥</div><div class="iast">gurucaraṇāmbujanirbharabhaktaḥ
+saṃsārādacirādbhava muktaḥ |
+sendriyamānasaniyamādevaṃ
+drakṣyasi nijahṛdayasthaṃ devam || 31 ||</div><div class="blk pd"><div class="lbl"><span>Padaccheda</span></div><div class="pd-d">गुरु-चरण-अम्बुज-निर्भर-भक्तः संसारात् अचिरात् भव मुक्तः स-इन्द्रिय-मानस-नियमात् एवम् द्रक्ष्यसि निज-हृदय-स्थम् देवम्</div><div class="pd-i">guru-caraṇa-ambuja-nirbhara-bhaktaḥ saṃsārāt acirāt bhava muktaḥ sa-indriya-mānasa-niyamāt evam drakṣyasi nija-hṛdaya-stham devam</div></div><div class="blk wbw"><div class="lbl"><span>Word by word</span><span class="ctl"><button class="sw mini" data-pref="lg" aria-pressed="false"><span class="k"></span>Lemma &amp; grammar</button><span class="seg" role="group" aria-label="Script for lemma and grammar"><button class="dv" data-script="deva" aria-pressed="false">देव</button><button data-script="iast" aria-pressed="false">IAST</button></span></span></div><div class="words"></div></div><div class="tr">Wholly devoted to the lotus feet of the Guru, become free soon from the cycle of birth and death. Thus, through restraint of the senses and the mind, you will see the Lord who dwells in your own heart.</div></article>
+</main>
+
+<footer id="credits">
+<div class="cr-list"><p><b>Sanskrit text:</b> The Works of Sri Sankaracharya, vol. 18 (Stotras, vol. 2), Sri Vani Vilas Press, Srirangam, 1910, pp. 62–69, where it is printed as <i>Mohamudgara</i>. The edition is in the public domain; Vedic Space transcribed the text from the <a href="https://archive.org/details/CompleteWorksOfSriSankaracharyaIn20Volumes1910Edition/WorksOfSriSankaracharya18-Stotras2/page/n73/mode/2up" target="_blank" rel="noopener">Internet Archive scan</a> (The Free Indological Collection). Anusvāra and visarga lost in the scan are restored; the edition's readings are otherwise kept.</p><p><b>Word analysis, meanings and translation:</b> Vedic Space, draft prepared with Claude; awaiting review.</p><p><b>Licence:</b> Vedic Space's additions to this page (Devanāgarī and IAST transcription, padaccheda, word-by-word meanings and the English translation) are released under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>, for non-commercial use only.</p><p><b>Fonts:</b> Tiro Devanagari Sanskrit, Noto Serif Devanagari and Noto Serif (SIL Open Font License).</p><p><b>Dictionary entries</b> (shown when a word is clicked): Monier-Williams, <i>A Sanskrit-English Dictionary</i>, 1899, and V. S. Apte, <i>The Practical Sanskrit-English Dictionary</i>, 1890; Cologne Digital Sanskrit Dictionaries, © 2014 The Sanskrit Library and Thomas Malten, CC BY-NC-SA 3.0.</p></div>
+</footer>
+</div>
+<div class="dict-back" id="dict-back">
+  <div class="dict" role="dialog" aria-modal="true" aria-labelledby="dict-w">
+    <div class="dict-head">
+      <div class="dh"><div class="dw" id="dict-w"></div><div class="di" id="dict-i"></div><div class="dm" id="dict-m"></div></div>
+      <button class="dict-x" id="dict-x" aria-label="Close">×</button>
+    </div>
+    <div class="dict-body" id="dict-body"></div>
+    <div class="dict-foot">Monier-Williams (1899) and Apte (1890), from the Cologne Digital Sanskrit Dictionaries, CC BY-NC-SA 3.0.</div>
+  </div>
+</div>
+<nav class="focus-nav" aria-label="Verse navigation">
+  <button class="fn-btn" id="fn-prev" type="button" aria-label="Previous verse">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11.5 5.5 5 12l6.5 6.5"/></svg>
+  </button>
+  <span class="fn-leap-tx prev" id="fn-leap-prev" hidden><span class="k"></span><span class="d" lang="sa"></span></span>
+  <span class="fn-mid"><span class="fn-count" id="fn-count"></span><span class="fn-hint" aria-hidden="true"><span class="h-touch">Swipe</span><span class="h-keys">← → keys</span></span></span>
+  <span class="fn-leap-tx next" id="fn-leap-next" hidden><span class="k"></span><span class="d" lang="sa"></span></span>
+  <button class="fn-btn" id="fn-next" type="button" aria-label="Next verse">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12.5 5.5 19 12l-6.5 6.5"/></svg>
+  </button>
+</nav>
+<button class="to-top" id="to-top" type="button" aria-label="Back to top" tabindex="-1">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>
+</button>
+<script id="page" type="application/json">{"files":["data/bhaja-govindam/01.json"],"lex":true}</script>
+<script src="grantha.js"></script>
 </body>
 </html>
